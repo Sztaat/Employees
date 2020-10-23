@@ -39,6 +39,23 @@ def addemp():
     role.delete(0, END)
     shift.delete(0, END)
 
+# Remove employee
+def delemp():
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+
+    # Delete record
+    c.execute("DELETE FROM Employees WHERE oid = " + rem.get())
+
+    # Clearing boxes
+    rem.delete(0, END)
+    # Save changes
+    conn.commit()
+    # Close connection
+    conn.close()
+
+    
+
 # List records
 def listemp():
     conn = sqlite3.connect('database.db')
@@ -49,10 +66,10 @@ def listemp():
 
     print_rec = ''
     for rec in records:
-        print_rec += str(rec[4]) + ".  " + str(rec[0]) + "  " + str (rec[1]) + "  " + str(rec[2]) + "  " + str(rec[3]) +"\n"
+        print_rec += str(rec[4]) + "\t" + str(rec[0]) + "  " + str (rec[1]) + "  " + str(rec[2]) + "  " + str(rec[3]) +"\n"
 
     rec_label = Label(root, bg="white", justify=LEFT, text=print_rec)
-    rec_label.grid(row=7, column=0, columnspan=2)
+    rec_label.grid(row=8, column=0, columnspan=2)
         
 
     # Save changes
@@ -70,6 +87,10 @@ role.grid(row=3, column=1)
 shift = Entry(root, width=30)
 shift.grid(row=4, column=1)
 
+# Remove box
+rem = Entry(root, width=4)
+rem.grid(row=6, column=1)
+
 # Box labels
 name_label = Label(root, text="First Name")
 name_label.grid(row=1, column=0)
@@ -79,14 +100,20 @@ role_label = Label(root, text="Position")
 role_label.grid(row=3, column=0)
 shift_label = Label(root, text="Shift")
 shift_label.grid(row=4, column=0)
+"""rem_label = Label(root, text="ID", justify=LEFT)
+rem_label.grid(row=6, column=1)"""
 
 # Submit button
 submit_btn = Button(root, text="Add record to Database", command=addemp) 
 submit_btn.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
+# Delete button
+remove_btn = Button(root, text="Remove ID from Database", command=delemp)
+remove_btn.grid(row=6, column=0, pady=10, padx=10)
+
 # Search button
 search_btn = Button(root, text="Show Database", command=listemp)
-search_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=122)
+search_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=122)
 
 # Close connection
 conn.close()
